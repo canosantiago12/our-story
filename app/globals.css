@@ -1,8 +1,14 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+
+html,
+body,
+:root {
+  height: 100%;
+}
 
 :root {
   --background: hsl(0 0% 100%);

@@ -1,0 +1,47 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Story {
+  id        String       @id @default(uuid())
+  title     String
+  storyDate DateTime
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  images    StoryImage[]
+}
+
+model Album {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  albumDate   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  images      Image[]
+}
+
+model Image {
+  id         String       @id @default(uuid())
+  albumId    String?      @map("album_id")
+  album      Album?       @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  url        String
+  caption    String?
+  uploadedAt DateTime     @default(now())
+  stories    StoryImage[]
+}
+
+model StoryImage {
+  storyId String
+  imageId String
+  story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@id([storyId, imageId])
+}
