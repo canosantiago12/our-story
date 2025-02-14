@@ -75,7 +75,8 @@ export const AlbumCard = ({ album }: AlbumCardProps) => {
           transform,
         }}
         className={cn(
-          'relative w-full max-w-[250px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px] h-auto aspect-[3/4] rounded-xl bg-gradient-to-br',
+          'relative w-full max-w-[90vw] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px]',
+          'aspect-[3/4] rounded-xl bg-gradient-to-br',
           resolvedTheme === 'dark'
             ? 'from-zinc-800 to-neutral-900'
             : 'from-slate-200 to-cyan-200'
@@ -99,13 +100,16 @@ export const AlbumCard = ({ album }: AlbumCardProps) => {
         >
           <p
             style={{ transform: 'translateZ(50px)' }}
-            className='text-center text-3xl font-bold text-white drop-shadow-lg'
+            className='text-center text-2xl sm:text-3xl font-bold text-white drop-shadow-lg'
           >
             {album.title}
           </p>
+          <p style={{ transform: 'translateZ(50px)' }} className='text-center font-semibold text-2xl'>
+            {album.description}
+          </p>
           <p
             style={{ transform: 'translateZ(50px)' }}
-            className='text-center text-white drop-shadow-lg'
+            className='text-center text-sm sm:text-lg text-white drop-shadow-lg'
           >
             {formattedDate}
           </p>
