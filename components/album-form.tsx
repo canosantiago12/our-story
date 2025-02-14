@@ -65,18 +65,18 @@ export const AlbumForm = ({
       });
 
       toast.success(`Album ${data.title} created successfully!`, {
-        id: 'create-category',
+        id: 'create-album',
       });
 
       onSuccessCallBack(data);
 
       await queryClient.invalidateQueries({
-        queryKey: ['categories'],
+        queryKey: ['albums'],
       });
     },
     onError: (error) => {
       toast.error('Something went wrong!', {
-        id: 'create-category',
+        id: 'create-album',
       });
       setError(error.message);
     },
@@ -84,8 +84,8 @@ export const AlbumForm = ({
 
   const onSubmit = useCallback(
     (values: z.infer<typeof NewAlbumSchema>) => {
-      toast.loading('Creating category...', {
-        id: 'create-category',
+      toast.loading('Creating album...', {
+        id: 'create-album',
       });
       mutate(values);
     },

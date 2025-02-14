@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ThemeProvider } from 'next-themes';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const RootProvider = ({ children }: { children: React.ReactNode }) => {
@@ -17,6 +18,7 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

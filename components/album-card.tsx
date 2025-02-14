@@ -1,6 +1,7 @@
 'use client';
 
 import { MouseEvent, useRef } from 'react';
+import { Album } from '@prisma/client';
 import {
   motion,
   useMotionTemplate,
@@ -11,7 +12,11 @@ import {
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
-export const AlbumCard = () => {
+interface AlbumCardProps {
+  album: Album;
+}
+
+export const AlbumCard = ({ album }: AlbumCardProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -55,7 +60,7 @@ export const AlbumCard = () => {
           transformStyle: 'preserve-3d',
           transform,
         }}
-        className='relative h-96 w-72 rounded-xl bg-gradient-to-br from-slate-300 to-cyan-200'
+        className='relative w-full max-w-[250px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px] h-auto aspect-[3/4] rounded-xl bg-gradient-to-br from-slate-300 to-cyan-200'
       >
         <div
           style={{
@@ -68,7 +73,7 @@ export const AlbumCard = () => {
             style={{ transform: 'translateZ(50px)' }}
             className='text-center text-2xl font-bold'
           >
-            Hola
+            {album.title}
           </p>
         </div>
       </motion.div>

@@ -18,23 +18,26 @@ model Story {
 }
 
 model Album {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String?
   albumDate   DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  images      Image[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  images      AlbumImage[]
+  thumbnailId String?      @unique @map("thumbnail_id")
+  thumbnail   Image?       @relation("AlbumThumbnail", fields: [thumbnailId], references: [id], onDelete: SetNull)
 }
 
 model Image {
   id         String       @id @default(uuid())
-  albumId    String?      @map("album_id")
-  album      Album?       @relation(fields: [albumId], references: [id], onDelete: Cascade)
   url        String
   caption    String?
   uploadedAt DateTime     @default(now())
+  albums     AlbumImage[]
   stories    StoryImage[]
+
+  thumbnailAlbum Album? @relation("AlbumThumbnail")
 }
 
 model StoryImage {
@@ -44,4 +47,13 @@ model StoryImage {
   image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   @@id([storyId, imageId])
+}
+
+model AlbumImage {
+  albumId String
+  imageId String
+  album   Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@id([albumId, imageId]) // ✅ Composite primary key
 }
