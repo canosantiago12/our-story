@@ -49,7 +49,8 @@ export const AlbumForm = ({
     defaultValues: {
       title: '',
       description: '',
-      albumDate: new Date(),
+      albumDate: undefined,
+      thumbnailImage: undefined,
     },
   });
 
@@ -61,7 +62,8 @@ export const AlbumForm = ({
       form.reset({
         title: '',
         description: '',
-        albumDate: new Date(),
+        albumDate: undefined,
+        thumbnailImage: undefined,
       });
 
       toast.success(`Album ${data.title} created successfully!`, {
@@ -107,7 +109,7 @@ export const AlbumForm = ({
               <FormItem>
                 <FormLabel>Title </FormLabel>
                 <FormControl>
-                  <Input placeholder='Title' {...field}></Input>
+                  <Input placeholder='Title' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -120,7 +122,7 @@ export const AlbumForm = ({
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input placeholder='Description' {...field}></Input>
+                  <Input placeholder='Description' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,6 +163,28 @@ export const AlbumForm = ({
                     />
                   </PopoverContent>
                 </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='thumbnailImage'
+            render={({ field: { onChange, onBlur, ref } }) => (
+              <FormItem>
+                <FormLabel>Thumbnail Image</FormLabel>
+                <FormControl>
+                  <Input
+                    type='file'
+                    accept='image/jpeg, image/png, image/webp'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || undefined;
+                      onChange(file);
+                    }}
+                    onBlur={onBlur}
+                    ref={ref}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
