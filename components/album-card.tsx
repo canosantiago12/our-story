@@ -1,13 +1,17 @@
 'use client';
 
-import { MouseEvent, useRef } from 'react';
+import { format } from 'date-fns';
+import { useTheme } from 'next-themes';
 import { Album } from '@prisma/client';
+import { MouseEvent, useRef } from 'react';
 import {
   motion,
   useMotionTemplate,
   useMotionValue,
   useSpring,
 } from 'framer-motion';
+
+import { cn } from '@/lib/utils';
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
@@ -17,6 +21,8 @@ interface AlbumCardProps {
 }
 
 export const AlbumCard = ({ album }: AlbumCardProps) => {
+  const { resolvedTheme } = useTheme();
+
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -50,6 +56,10 @@ export const AlbumCard = ({ album }: AlbumCardProps) => {
     y.set(0);
   };
 
+  const formattedDate = album.albumDate
+    ? format(new Date(album.albumDate), 'd MMMM yyyy')
+    : 'Unknown Date';
+
   return (
     <>
       <motion.div
@@ -60,20 +70,31 @@ export const AlbumCard = ({ album }: AlbumCardProps) => {
           transformStyle: 'preserve-3d',
           transform,
         }}
-        className='relative w-full max-w-[250px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px] h-auto aspect-[3/4] rounded-xl bg-gradient-to-br from-slate-300 to-cyan-200'
+        className={cn(
+          'relative w-full max-w-[250px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px] h-auto aspect-[3/4] rounded-xl bg-gradient-to-br',
+          resolvedTheme === 'dark'
+            ? 'from-zinc-800 to-neutral-900'
+            : 'from-slate-200 to-cyan-200'
+        )}
       >
         <div
           style={{
             transform: 'translateZ(75px)',
             transformStyle: 'preserve-3d',
           }}
-          className='absolute inset-4 grid place-content-center rounded-xl bg-white shadow-lg'
+          className={cn(
+            'absolute inset-4 flex flex-col justify-end place-content-center rounded-xl shadow-lg p-6',
+            resolvedTheme === 'dark' ? 'bg-neutral-800' : ' bg-white'
+          )}
         >
           <p
             style={{ transform: 'translateZ(50px)' }}
-            className='text-center text-2xl font-bold'
+            className='text-center text-3xl font-bold'
           >
             {album.title}
+          </p>
+          <p style={{ transform: 'translateZ(50px)' }} className='text-center'>
+            {formattedDate}
           </p>
         </div>
       </motion.div>
