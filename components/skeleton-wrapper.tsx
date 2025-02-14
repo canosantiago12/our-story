@@ -23,8 +23,10 @@ export const SkeletonWrapper = ({
 
   return (
     <>
-      <div className='relative w-full'>
-        <Skeleton className={cn(fullWidth && 'w-full min-h-[100px]')}>
+      <div className='relative w-full flex-1'>
+        <Skeleton
+          className={cn(fullWidth && 'w-full h-full rounded-[var(--radius)]')}
+        >
           <div className='opacity-0'>{children}</div>
         </Skeleton>
 

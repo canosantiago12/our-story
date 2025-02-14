@@ -14,3 +14,17 @@ export const getAlbums = async () => {
     return null;
   }
 };
+
+export const getAlbumById = async (albumId: string) => {
+  try {
+    const album = await db.album.findUnique({
+      where: { id: albumId },
+      include: { images: true, thumbnail: true },
+    });
+
+    return album;
+  } catch (error) {
+    console.log('🚀 ~ error:', error);
+    return null;
+  }
+};

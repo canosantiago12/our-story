@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { AlbumForm } from '@/components/album-form';
+import { AlbumForm } from '@/components/album-components/album-form';
 import {
   Dialog,
   DialogContent,
