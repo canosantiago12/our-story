@@ -1,10 +1,8 @@
 'use client';
 
-import Video from 'next-video';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import backgroundVideo from '@/videos/txt-41Winks.mp4';
 
 export default function Home() {
   const router = useRouter();
@@ -16,13 +14,18 @@ export default function Home() {
   return (
     <main className='relative h-screen w-screen overflow-hidden flex items-center justify-center'>
       <div className='fixed inset-0 h-screen w-screen'>
-        <Video
-          src={backgroundVideo}
+        <video
+          width='100%'
+          height='100%'
           className='h-full w-full object-cover'
-          controls={false}
           autoPlay
           loop
-        />
+          playsInline
+          preload='none'
+        >
+          <source src='/videos/txt-41Winks.mp4' type='video/mp4' />
+          Your browser does not support the video tag.
+        </video>
       </div>
 
       <div className='absolute inset-0 bg-black/50'></div>
@@ -32,13 +35,8 @@ export default function Home() {
           Our Story
         </h1>
         <p className='font-semibold text-white text-5xl'>GACL - SCH</p>
-        <div>
-          <Button
-            variant='default'
-            size='lg'
-            onClick={onClick}
-            className='w-lg'
-          >
+        <div className='flex gap-4'>
+          <Button variant='default' size='lg' onClick={onClick}>
             Open
           </Button>
         </div>
