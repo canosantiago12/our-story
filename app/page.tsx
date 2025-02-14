@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 export default function Home() {
   const router = useRouter();
 
+  const videoUrl =
+    'https://ewv7mmkhhsczljc9.public.blob.vercel-storage.com/txt-41Winks-TioB5iNs40n6ncd08l726T2z8mmW3Y.mp4';
+
   const onClick = () => {
     router.push('/albums');
   };
@@ -15,17 +18,11 @@ export default function Home() {
     <main className='relative h-screen w-screen overflow-hidden flex items-center justify-center'>
       <div className='fixed inset-0 h-screen w-screen'>
         <video
-          width='100%'
-          height='100%'
           className='h-full w-full object-cover'
           autoPlay
           loop
-          playsInline
-          preload='none'
-        >
-          <source src='/videos/txt-41Winks.mp4' type='video/mp4' />
-          Your browser does not support the video tag.
-        </video>
+          src={videoUrl}
+        />
       </div>
 
       <div className='absolute inset-0 bg-black/50'></div>
