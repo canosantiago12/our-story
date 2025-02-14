@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { AlbumForm } from '@/components/album-form';
 import {
@@ -10,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useState } from 'react';
 
 export const AddAlbumDialog = () => {
   const [open, setOpen] = useState(false);

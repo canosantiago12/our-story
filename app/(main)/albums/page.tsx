@@ -1,13 +1,16 @@
 'use client';
 
+import { toast } from 'sonner';
 import { useTheme } from 'next-themes';
 import { Album } from '@prisma/client';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { cn } from '@/lib/utils';
 import { AlbumCard } from '@/components/album-card';
+import { deleteAlbum } from '@/actions/album-actions';
 import { AddAlbumDialog } from '@/components/add-album-dialog';
 import { SkeletonWrapper } from '@/components/skeleton-wrapper';
+import { CardContextMenu } from '@/components/card-context-menu';
 
 const fetchAlbums = async (): Promise<Album[]> => {
   const response = await fetch('/api/albums');
@@ -21,6 +24,9 @@ const fetchAlbums = async (): Promise<Album[]> => {
 };
 
 const AlbumsPage = () => {
+  const { resolvedTheme } = useTheme();
+  const queryClient = useQueryClient();
+
   const {
     data: albums = [],
     isLoading,
@@ -30,7 +36,23 @@ const AlbumsPage = () => {
     queryFn: fetchAlbums,
   });
 
-  const { resolvedTheme } = useTheme();
+  const { mutate } = useMutation({
+    mutationFn: deleteAlbum,
+    onSuccess: async (data: Album) => {
+      toast.success(`Album ${data.title} deleted successfully!`, {
+        id: 'delete-album',
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ['albums'],
+      });
+    },
+    onError: () => {
+      toast.error('Something went wrong!', {
+        id: 'delete-album',
+      });
+    },
+  });
 
   return (
     <>
@@ -56,7 +78,14 @@ const AlbumsPage = () => {
             )}
           >
             {albums.map((album) => (
-              <AlbumCard key={album.id} album={album} />
+              <CardContextMenu
+                key={album.id}
+                id={album.id}
+                type='album'
+                onDelete={() => mutate(album.id)}
+              >
+                <AlbumCard album={album} />
+              </CardContextMenu>
             ))}
           </div>
         </SkeletonWrapper>
