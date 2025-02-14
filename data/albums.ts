@@ -2,7 +2,11 @@ import { db } from '@/lib/db';
 
 export const getAlbums = async () => {
   try {
-    const albums = await db.album.findMany();
+    const albums = await db.album.findMany({
+      include: {
+        thumbnail: true,
+      },
+    });
 
     return albums;
   } catch (error) {

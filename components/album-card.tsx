@@ -16,8 +16,12 @@ import { cn } from '@/lib/utils';
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
+interface AlbumWithThumbnail extends Album {
+  thumbnail?: { url: string };
+}
+
 interface AlbumCardProps {
-  album: Album;
+  album: AlbumWithThumbnail;
 }
 
 export const AlbumCard = ({ album }: AlbumCardProps) => {
@@ -81,19 +85,28 @@ export const AlbumCard = ({ album }: AlbumCardProps) => {
           style={{
             transform: 'translateZ(75px)',
             transformStyle: 'preserve-3d',
+            backgroundImage: album.thumbnail?.url
+              ? `url(${album.thumbnail.url})`
+              : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
           className={cn(
             'absolute inset-4 flex flex-col justify-end place-content-center rounded-xl shadow-lg p-6',
-            resolvedTheme === 'dark' ? 'bg-neutral-800' : ' bg-white'
+            resolvedTheme === 'dark' ? 'bg-neutral-800' : 'bg-white'
           )}
         >
           <p
             style={{ transform: 'translateZ(50px)' }}
-            className='text-center text-3xl font-bold'
+            className='text-center text-3xl font-bold text-white drop-shadow-lg'
           >
             {album.title}
           </p>
-          <p style={{ transform: 'translateZ(50px)' }} className='text-center'>
+          <p
+            style={{ transform: 'translateZ(50px)' }}
+            className='text-center text-white drop-shadow-lg'
+          >
             {formattedDate}
           </p>
         </div>
