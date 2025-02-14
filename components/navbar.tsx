@@ -8,7 +8,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { ThemeSwitcherButton } from '@/components/theme-switcher-button';
 
 const items = [
-  { label: 'Dashboard', link: '/dashboard' },
+  { label: 'Dashboard', link: '/albums' },
   { label: 'Story book', link: '/story-book' },
 ];
 

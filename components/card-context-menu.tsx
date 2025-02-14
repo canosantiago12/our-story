@@ -8,7 +8,6 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-  ContextMenuSeparator,
   ContextMenuShortcut,
 } from '@/components/ui/context-menu';
 
@@ -43,7 +42,6 @@ export const CardContextMenu = ({
             </ContextMenuShortcut>
           </ContextMenuItem>
         </ContextMenuContent>
-        <ContextMenuSeparator />
       </ContextMenu>
     </>
   );
