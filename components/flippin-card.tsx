@@ -1,69 +1,72 @@
 'use client';
 
+import Image from 'next/image';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
 
-const FlippingCard = () => {
+interface FlippingCardProps {
+  imageUrl: string;
+}
+
+const FlippingCard = ({ imageUrl }: FlippingCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsFlipped((prev) => !prev);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const { resolvedTheme } = useTheme();
 
   return (
     <motion.div
-      className='card-container'
+      className='relative w-full max-w-[90vw] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] aspect-[3/4] rounded-xl'
       style={{
-        transform: 'translateZ(75px)',
+        transformStyle: 'preserve-3d',
       }}
+      onHoverStart={() => setIsFlipped(true)}
+      onHoverEnd={() => setIsFlipped(false)}
     >
       <motion.div
-        className='card'
+        className='w-full h-full'
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.5 }}
         style={{
-          width: '100%',
-          height: '100%',
           position: 'relative',
           transformStyle: 'preserve-3d',
+          width: '100%',
+          height: '100%',
         }}
       >
-        {/* Front Side */}
+        {/* Front Side: Image */}
         <motion.div
-          className='card-front'
+          className='absolute inset-0'
           style={{
-            position: 'absolute',
             backfaceVisibility: 'hidden',
             width: '100%',
             height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
           }}
         >
-          <p className='bg-red-500 w-50'>HOLA</p>
+          <Image
+            src={imageUrl}
+            alt='Album Image'
+            fill
+            className='object-cover rounded-xl'
+          />
         </motion.div>
 
-        {/* Back Side */}
+        {/* Back Side: Solid Black */}
         <motion.div
-          className='card-back'
+          className={cn(
+            'absolute inset-0 bg-black flex items-center justify-center rounded-xl bg-gradient-to-br',
+            resolvedTheme === 'dark'
+              ? 'from-zinc-800 to-neutral-900'
+              : 'from-slate-200 to-cyan-200'
+          )}
           style={{
-            position: 'absolute',
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
             width: '100%',
             height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
           }}
-        >
-          <p className='bg-blue-500 w-50'>ADIOS</p>
-        </motion.div>
+        />
       </motion.div>
     </motion.div>
   );

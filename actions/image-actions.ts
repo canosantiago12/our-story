@@ -11,7 +11,7 @@ export const createImage = async (file: File, albumId: string) => {
 
   const filePath = `albums/${albumId}/${Date.now()}-${file.name}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('album-images')
     .upload(filePath, file, {
       contentType: file.type,

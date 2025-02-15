@@ -80,11 +80,12 @@ const AlbumsPage = () => {
           >
             {albums.map((album) => (
               <CardContextMenu
+                key={album.id}
                 id={album.id}
                 type='album'
                 onDelete={() => mutate(album.id)}
               >
-                <Link key={album.id} href={`/albums/${album.id}`}>
+                <Link href={`/albums/${album.id}`}>
                   <AlbumCard album={album} />
                 </Link>
               </CardContextMenu>

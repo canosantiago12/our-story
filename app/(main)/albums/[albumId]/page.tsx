@@ -1,34 +1,77 @@
 'use client';
 
-import React from 'react';
+import { use } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '@/lib/utils';
-import { getAlbumById } from '@/data/albums';
-import { getImagesByIds } from '@/data/images';
+import { Album, Image } from '@prisma/client';
 import ThemeWrapper from '@/components/theme-wrapper';
 import { AlbumImagesGrid } from '@/components/album-components/album-images';
 import { AlbumDetailsHeader } from '@/components/album-components/album-detail-header';
 
-const AlbumDetailsPage = ({ params }) => {
-  const { albumId } = React.use(params);
+interface AlbumDetailsPageProps {
+  params: Promise<{ albumId: string }>;
+}
 
-  const { data: album, isLoading: albumLoading } = useQuery({
-    queryKey: ['album'],
-    queryFn: () => getAlbumById(albumId),
+interface AlbumWithImages extends Album {
+  images: {
+    imageId: string;
+    albumId: string;
+  }[];
+}
+
+const fetchAlbum = async (albumId: string): Promise<AlbumWithImages | null> => {
+  const response = await fetch(`/api/albums/${albumId}`);
+
+  if (!response.ok) return null;
+
+  const json = await response.json();
+  return json.data;
+};
+
+const fetchImages = async (imageIds: string[]): Promise<Image[]> => {
+  console.log('🚀 ~ imageIds:', imageIds);
+  if (!imageIds.length) return [];
+
+  const response = await fetch('/api/images', {
+    method: 'POST',
+    body: JSON.stringify({ imageIds }),
+    headers: { 'Content-Type': 'application/json' },
   });
 
-  const { data: images = [] } = useQuery({
-    queryKey: ['album-images'],
-    queryFn: () =>
-      getImagesByIds(album?.images.map((image) => image.imageId) || []),
+  if (!response.ok) return [];
+
+  const json = await response.json();
+  return json.data;
+};
+
+const AlbumDetailsPage = ({ params }: AlbumDetailsPageProps) => {
+  const { albumId } = use(params);
+
+  const {
+    data: album,
+    isLoading: isAlbumLoading,
+    isError: isAlbumError,
+  } = useQuery<AlbumWithImages | null>({
+    queryKey: ['album', albumId],
+    queryFn: () => fetchAlbum(albumId),
   });
 
-  if (albumLoading) {
+  const {
+    data: images = [],
+    isLoading: isImagesLoading,
+    isError: isImagesError,
+  } = useQuery<Image[]>({
+    queryKey: ['album-images', albumId],
+    queryFn: () => fetchImages(album?.images.map((img) => img.imageId) || []),
+    enabled: !!album,
+  });
+
+  if (isAlbumLoading || isImagesLoading) {
     return <div className='text-center text-gray-500'>Loading album...</div>;
   }
 
-  if (!album) {
+  if (isAlbumError || isImagesError || !album) {
     return <div className='text-center text-red-500'>Album not found.</div>;
   }
 
@@ -51,7 +94,7 @@ const AlbumDetailsPage = ({ params }) => {
         >
           <AlbumImagesGrid
             albumId={album.id}
-            images={images || []}
+            images={images}
             thumbnailImage={album.thumbnailId}
           />
         </div>

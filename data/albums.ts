@@ -16,7 +16,6 @@ export const getAlbums = async () => {
 };
 
 export const getAlbumById = async (albumId: string) => {
-  console.log('🚀 ~ albumId:', albumId);
   try {
     const album = await db.album.findUnique({
       where: { id: albumId },
