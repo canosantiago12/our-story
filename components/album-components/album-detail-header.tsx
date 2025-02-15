@@ -24,7 +24,7 @@ export const AlbumDetailsHeader = ({
     <>
       <div className='h-full flex flex-col'>
         <div className='flex flex-col sm:flex-row items-center gap-4 h-full'>
-          <h1 className='text-6xl lg:text-8xl font-extrabold tracking-tight text-center sm:text-left border-r-0 sm:border-r-4 border-r-white pr-0 sm:pr-6'>
+          <h1 className='text-6xl lg:text-8xl font-extrabold tracking-tight text-center sm:text-left border-r-0 sm:border-r-4 dark:border-r-white border-r-black pr-0 sm:pr-6'>
             {title}
           </h1>
 
